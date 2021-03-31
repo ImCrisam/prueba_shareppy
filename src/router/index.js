@@ -17,6 +17,11 @@ const routes = [
     component: () => import('@/components/Signup.vue'),
   },
   {
+    path: '/',
+    name: 'productos',
+    component: () => import('@/views/Productos.vue'),
+  },
+  {
     path: '/DashBoard',
     component: () => import('@/views/DashBoard.vue'),
     meta: {
@@ -35,7 +40,7 @@ const routes = [
       },
       {
         path: '/Productos',
-        name: 'productos',
+        name: 'tablaProductos',
         component: () => import('@/views/DashBoard/TableProductos.vue'),
 
         meta: {
@@ -61,9 +66,9 @@ router.beforeEach((to, from, next) => {
       next();
     } else if (store.state.user && !store.getters.admin) {
       if (to.name === "DashBoard") {
-        /* next({
-          name: 'View'
-        }); */
+        next({
+          name: 'productos'
+        }); 
       } else {
         next();
       }

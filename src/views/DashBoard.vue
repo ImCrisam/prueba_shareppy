@@ -162,10 +162,10 @@ export default {
       if (this.$store.getters.admin) {
         return [
           { to: "usuarios", text: "Usuarios", icon: "mdi-table-account" },
-          { to: "productos", text: "Productos", icon: "mdi-table" },
+          { to: "tablaProductos", text: "Productos", icon: "mdi-table" },
         ];
       } else {
-        return [{ to: "productos", text: "Productos", icon: "mdi-table" }];
+        return [{ to: "tablaProductos", text: "Productos", icon: "mdi-table" }];
       }
     },
     getRol() {
