@@ -1,9 +1,5 @@
 <template>
   <v-container>
-    <v-layout row v-if="error">
-      <v-flex xs12 sm6 offset-sm3>
-      </v-flex>
-    </v-layout>
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -23,8 +19,7 @@
                   </v-flex>
                 </v-layout>
                 <v-layout row>
-                  <v-checkbox v-model="admin" label="Administrador"/>
-
+                  <v-checkbox v-model="admin" label="Administrador" />
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
@@ -51,10 +46,18 @@
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
-                <v-layout>
-                  <v-flex xs12 class="mt-10 d-flex justify-space-around">
-                    <v-btn @click="$router.go(-1)" small>cancelar</v-btn>
-                    <v-btn type="submit" color="primary"  :loading="loading">Register</v-btn>
+                <v-layout class="mt-5">
+                  <v-flex xs12 class="">
+                    <v-btn @click="$router.go(-1)">cancelar</v-btn>
+                  </v-flex>
+                  <v-flex xs12 class="">
+                    <v-btn
+                      type="submit"
+                      block
+                      color="primary"
+                      :loading="loading"
+                      >Register</v-btn
+                    >
                   </v-flex>
                 </v-layout>
               </form>
@@ -67,13 +70,16 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
 export default {
   data() {
     return {
-      email: "cristia.o.zanardy@gmail.com",
+      email: "",
       admin: false,
-      password: "123456",
-      confirmPassword: "123456",
+      password: "",
+      confirmPassword: "",
+      loading: false,
+      error: "",
     };
   },
   computed: {
@@ -88,26 +94,42 @@ export default {
     user() {
       return this.$store.getters.user;
     },
-    error() {
-      return this.$store.getters.error;
-    },
-    loading() {
-      return this.$store.getters.loading;
-    },
   },
   methods: {
     onSignup() {
-
-      this.$store.dispatch("signUserUp", {
-        email: this.email,
-        password: this.password,
-        admin: this.admin,
-      });
+      if (this.comparePasswords && this.minPasswords) {
+        this.loading = true;
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(this.email, this.password)
+          .then((auth) => {
+            firebase
+              .firestore()
+              .collection("user")
+              .doc(auth.user.uid)
+              .set({
+                email: auth.user.email,
+                admin: this.admin,
+                state: true,
+              })
+              .then((message) => {
+                this.loading = false;
+                console.log("create");
+                this.$router.go(-1);
+              })
+              .catch((error) => {
+                console.log("erro doc "+error);
+                 this.loading = false;
+              });
+          })
+          .catch((error) => {
+            console.log("auth erro"+error);
+             this.loading = false;
+          });
+      } else {
+        this.error = "error";
+      }
     },
-    onDismissed() {
-      this.$store.dispatch("clearError");
-    }
-   
   },
 };
 </script>
