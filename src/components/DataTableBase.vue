@@ -43,7 +43,12 @@
       class="elevation-1"
     >
       <template v-slot:[`item.rol`]="{ item }" class="text-center">
-        <span :class="item.rol=='Administrador'?'primary--text':'succes--text'">{{item.rol}}</span>
+        <span
+          :class="
+            item.rol == 'Administrador' ? 'primary--text' : 'succes--text'
+          "
+          >{{ item.rol }}</span
+        >
       </template>
       <template v-slot:[`item.opciones`]="{ item }">
         <v-icon class="mr-2" @click="$emit('edit', item)" color="accent">
@@ -62,7 +67,11 @@
           mdi-checkbox-marked-circle-outline
         </v-icon>
       </template>
-
+      <template v-slot:[`item.borrar`]="{ item }">
+        <v-icon class="mr-2" @click="$emit('delete', item)" color="error">
+          mdi-delete-circle-outline</v-icon
+        >
+      </template>
       <template v-slot:[`item.state`]="{ item }">
         <div v-if="item.state">
           <span class="success--text">Activo</span>

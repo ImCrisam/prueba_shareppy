@@ -91,7 +91,10 @@ export default {
         model: null,
         type: "default (no property)",
       },
-      menu: [{ to: "usuarios", text: "Usuarios", icon: "mdi-table-account" }],
+      menu: [
+        { to: "usuarios", text: "Usuarios", icon: "mdi-table-account" },
+        { to: "productos", text: "Productos", icon: "mdi-table" },
+      ],
 
       isloading: false,
     };
@@ -109,7 +112,7 @@ export default {
     salir() {
       this.$store.commit("setUser", null);
       this.$store.commit("setAdmin", null);
-      this.$router.push({name:'home'})
+      this.$router.push({ name: "home" });
     },
     vista() {
       this.$router.push({

@@ -8,59 +8,39 @@
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12>
-                <h4 class="headline">{{ email }}</h4>
+              <v-flex xs12 md6>
+                <v-text-field
+                  name="Nombres"
+                  label="Nombres"
+                  id="Nombres"
+                  v-model="nombre"
+                ></v-text-field>
               </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="Nombres"
-                      label="Nombres"
-                      id="Nombres"
-                      v-model="nombre"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="cedula"
-                      label="cedula"
-                      id="cedula"
-                      v-model="cedula"
-                      ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="telefono"
-                      label="telefono"
-                      id="telefono"
-                      v-model="telefono"
-                      
-                    ></v-text-field>
-                  </v-flex>
-              <v-flex xs12 sm6>
-                <v-select
-                  v-model="rol"
-                  :items="roles"
-                  label="Rol"
-                  item-text="nombre"
-                  item-value="id"
-                  persistent-hint
-                  return-object
-                  single-line
-                >
-                </v-select>
+              <v-flex xs12 md6>
+                <v-text-field
+                  name="cantidad"
+                  label="cantidad"
+                  id="cantidad"
+                  v-model="cantidad"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  name="valor"
+                  label="valor"
+                  id="valor"
+                  v-model="valor"
+                ></v-text-field>
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions
-          ><v-flex xs8 sm6>
-            <v-btn color="info" disabled @click="cambioContra"
-              >Cambiar Contraseña</v-btn
-            >
-          </v-flex>
+        <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="dialog = false">Cancelar</v-btn>
-          <v-btn color="primary" @click="dialogAcepter">Guardar</v-btn>
+          <v-btn color="primary" @click="dialogAcepter">{{
+            isNew ? "Agregar" : "Actualizar"
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -101,6 +81,7 @@
       @add="add"
       @edit="edit"
       @active="active"
+      @delete="borrar"
     >
     </data-table-base>
   </v-layout>
@@ -116,14 +97,11 @@ export default {
   data() {
     return {
       dialog: false,
-      roles: ["Administrador", "Usuario", "Operador"],
-      rol: "",
-      email: "",
       id: "",
       nombre: "",
-      cedula: "",
-      telefono: "",
-      
+      cantidad: "",
+      valor: "",
+      isNew: false,
 
       dialogAlert: false,
       textDialogAler: "",
@@ -131,21 +109,19 @@ export default {
       timeout: 2000,
 
       isloading: false,
-      title: "Usuario",
-      titles: "Usuarios",
+      title: "Producto",
+      titles: "Productos",
       data: [],
 
       headers: [
-        { text: "Email", value: "email", sortable: true, align: "center" },
         { text: "Nombre", value: "nombre", sortable: true, align: "center" },
-        { text: "Cedula", value: "cedula", sortable: true, align: "center" },
-        { text: "Telefono", value: "telefono", sortable: true, align: "center" },
         {
-          text: "Rol",
-          value: "rol",
+          text: "Cantidad",
+          value: "cantidad",
           sortable: true,
           align: "center",
         },
+        { text: "Valor", value: "valor", sortable: true, align: "center" },
         {
           text: "Estado",
           value: "state",
@@ -155,6 +131,12 @@ export default {
         {
           text: "Opciones",
           value: "opciones",
+          sortable: false,
+          align: "center",
+        },
+        {
+          text: "Borrar",
+          value: "borrar",
           sortable: false,
           align: "center",
         },
@@ -170,31 +152,47 @@ export default {
       this.listar();
     },
     add() {
-      this.$router.push({
-        name: "logup",
-      });
+      this.isNew = true;
+      this.dialog = true;
+      this.id = "";
+      this.nombre = "";
+      this.cantidad = "";
+      this.valor = "";
     },
     edit(item) {
+      this.isNew = false;
       this.id = item.id;
       this.dialog = true;
-      this.email = item.email;
-      this.rol = item.rol;
       this.nombre = item.nombre;
-      this.cedula = item.cedula;
-      this.telefono = item.telefono;
+      this.cantidad = item.cantidad;
+      this.valor = item.valor;
     },
     active(item, is) {
       firebase
         .firestore()
-        .collection("user")
+        .collection("products")
         .doc(item.id)
         .update({
           state: is,
         })
         .then(() => {
-          var mensaje = "Usuario ";
+          var mensaje = "Producto ";
           mensaje += is ? "Activado" : "Desactivado";
           this.openDialogResponse(true, mensaje);
+        })
+        .catch((error) => {
+          this.openDialogResponse(false, "Error");
+          console.log(error);
+        });
+    },
+    borrar(item) {
+      firebase
+        .firestore()
+        .collection("products")
+        .doc(item.id)
+        .delete()
+        .then(() => {
+          this.openDialogResponse(true, "Producto borrado");
         })
         .catch((error) => {
           this.openDialogResponse(false, "Error");
@@ -214,17 +212,15 @@ export default {
       this.data = [];
       firebase
         .firestore()
-        .collection("user")
+        .collection("products")
         .get()
         .then((data) => {
           data.forEach((doc) => {
             this.data.push({
               id: doc.id,
-              rol: doc.data().rol,
               nombre: doc.data().nombre,
-              cedula: doc.data().cedula,
-              telefono: doc.data().telefono,
-              email: doc.data().email,
+              cantidad: doc.data().cantidad,
+              valor: doc.data().valor,
               state: doc.data().state,
             });
           });
@@ -235,28 +231,46 @@ export default {
         });
     },
     dialogAcepter() {
-      firebase
-        .firestore()
-        .collection("user")
-        .doc(this.id)
-        .update({
-          rol: this.rol,
-          nombre: this.nombre,
-          cedula: this.cedula,
-          telefono: this.telefono,
-        })
-        .then(() => {
-          this.openDialogResponse(true, "actualizado");
-          this.dialog = false;
-        })
-        .catch((error) => {
-          this.openDialogResponse(false, "Error");
-          this.dialog = false;
-          console.log(error);
-        });
+      if (this.isNew) {
+        firebase
+          .firestore()
+          .collection("products")
+          .add({
+            nombre: this.nombre,
+            cantidad: this.cantidad,
+            valor: this.valor,
+            state: true
+          })
+          .then(() => {
+            this.openDialogResponse(true, "Creado");
+            this.dialog = false;
+          })
+          .catch((error) => {
+            this.openDialogResponse(false, "Error");
+            this.dialog = false;
+            console.log(error);
+          });
+      } else {
+        firebase
+          .firestore()
+          .collection("products")
+          .doc(this.id)
+          .update({
+            nombre: this.nombre,
+            cantidad: this.cantidad,
+            valor: this.valor,
+          })
+          .then(() => {
+            this.openDialogResponse(true, "actualizado");
+            this.dialog = false;
+          })
+          .catch((error) => {
+            this.openDialogResponse(false, "Error");
+            this.dialog = false;
+            console.log(error);
+          });
+      }
     },
-
-    cambioContra() {},
   },
 };
 </script>

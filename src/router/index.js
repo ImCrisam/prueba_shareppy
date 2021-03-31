@@ -33,6 +33,15 @@ const routes = [
           admin: true
         },
       },
+      {
+        path: '/Productos',
+        name: 'productos',
+        component: () => import('@/views/DashBoard/TableProductos.vue'),
+
+        meta: {
+          admin: true
+        },
+      },
      
     ],
     
