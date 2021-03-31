@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -7,7 +8,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
@@ -16,15 +17,26 @@ const routes = [
     component: () => import('@/components/Signup.vue'),
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/About.vue')
-    }
-  }
+    path: '/DashBoard',
+    component: () => import('@/views/DashBoard.vue'),
+    meta: {
+      admin: true,
+    },
+    children: [
+
+      {
+        path: '/Usuarios',
+        name: 'usuarios',
+        component: () => import('@/views/DashBoard/TableUsers.vue'),
+
+        meta: {
+          admin: true
+        },
+      },
+     
+    ],
+    
+  },
 ]
 
 const router = new VueRouter({
@@ -32,5 +44,32 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+router.beforeEach((to, from, next) => {
+
+  if (to.meta.admin) {
+    if (store.state.user && store.getters.admin) {
+      next();
+    } else if (store.state.user && !store.getters.admin) {
+      if (to.name === "DashBoard") {
+        /* next({
+          name: 'View'
+        }); */
+      } else {
+        next();
+      }
+
+    } else {
+      next({
+        name: 'home'
+      });
+    }
+  } else {
+    next();
+  }
+
+
+
+});
 
 export default router

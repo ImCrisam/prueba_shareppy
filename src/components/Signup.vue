@@ -19,7 +19,18 @@
                   </v-flex>
                 </v-layout>
                 <v-layout row>
-                  <v-checkbox v-model="admin" label="Administrador" />
+                   <v-flex xs12>
+                <v-select
+                  v-model="rol"
+                  :items="roles"
+                  label="Rol"
+                  item-text="nombre"
+                  persistent-hint
+                  return-object
+                  single-line
+                >
+                </v-select>
+                   </v-flex>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
@@ -74,8 +85,9 @@ import firebase from "firebase/app";
 export default {
   data() {
     return {
+      roles: ["Administrador", "Usuario", "Operador"],
+      rol: "",
       email: "",
-      admin: false,
       password: "",
       confirmPassword: "",
       loading: false,
@@ -85,11 +97,11 @@ export default {
   computed: {
     comparePasswords() {
       return this.password !== this.confirmPassword
-        ? "Passwords do not match."
+        ? "Contraseña debe ser iguales"
         : true;
     },
     minPasswords() {
-      return this.password.length < 6 ? "Passwords small" : true;
+      return this.password.length < 6 ? "Min 6 caracteres" : true;
     },
     user() {
       return this.$store.getters.user;
@@ -108,12 +120,11 @@ export default {
             .doc(auth.user.uid)
             .set({
               email: auth.user.email,
-              admin: this.admin,
+              rol: this.rol,
               state: true,
             })
             .then((message) => {
               this.loading = false;
-              console.log("create");
               this.$router.go(-1);
             })
             .catch((error) => {

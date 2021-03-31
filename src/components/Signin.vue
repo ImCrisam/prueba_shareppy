@@ -60,8 +60,8 @@ import firebase from "firebase/app";
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      email: "admin@gmail.com",
+      password: "123456",
       loading: false,
       error: "",
     };
@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     onSignin() {
+      this.loading= true;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
@@ -84,18 +85,19 @@ export default {
             .get()
             .then((doc) => {
               if (doc.exists && doc.data().state) {
+                
                 this.$store.commit("setUser", auth.user);
-                this.$store.commit("setAdmin", doc.data().admin);
-                if (doc.data().admin) {
-                  /* router.push({
-                    name: "Importaciones",
-                  }); */
-                  console.log("entra admin");
+                this.$store.commit("setRol", doc.data().rol);
+                if (this.$store.getters.admin) {
+                  this.$router.push({
+                    name: "usuarios",
+                  });
+                  
                 } else {
                   /* router.push({
                     name: "View",
                   }); */
-                  console.log("entra user");
+                
                 }
               } else {
                 if (!doc.data().state) {
@@ -108,6 +110,7 @@ export default {
             })
             .catch((error) => {
               this.loading = false;
+              console.log("erro: "+error);
             });
         });
     },

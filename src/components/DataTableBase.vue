@@ -42,13 +42,8 @@
       :loading="isloading"
       class="elevation-1"
     >
-      <template v-slot:[`item.admin`]="{ item }" class="text-center">
-        <div v-if="item.admin">
-          <span class="primary--text">Administrador</span>
-        </div>
-        <div v-else>
-          <span class="succes--text">Usuario</span>
-        </div>
+      <template v-slot:[`item.rol`]="{ item }" class="text-center">
+        <span :class="item.rol=='Administrador'?'primary--text':'succes--text'">{{item.rol}}</span>
       </template>
       <template v-slot:[`item.opciones`]="{ item }">
         <v-icon class="mr-2" @click="$emit('edit', item)" color="accent">
