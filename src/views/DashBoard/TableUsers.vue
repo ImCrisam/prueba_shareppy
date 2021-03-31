@@ -11,31 +11,30 @@
               <v-flex xs12>
                 <h4 class="headline">{{ email }}</h4>
               </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="Nombres"
-                      label="Nombres"
-                      id="Nombres"
-                      v-model="nombre"
-                    ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="cedula"
-                      label="cedula"
-                      id="cedula"
-                      v-model="cedula"
-                      ></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 md6>
-                    <v-text-field
-                      name="telefono"
-                      label="telefono"
-                      id="telefono"
-                      v-model="telefono"
-                      
-                    ></v-text-field>
-                  </v-flex>
+              <v-flex xs12 md6>
+                <v-text-field
+                  name="Nombres"
+                  label="Nombres"
+                  id="Nombres"
+                  v-model="nombre"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 md6>
+                <v-text-field
+                  name="cedula"
+                  label="cedula"
+                  id="cedula"
+                  v-model="cedula"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 md6>
+                <v-text-field
+                  name="telefono"
+                  label="telefono"
+                  id="telefono"
+                  v-model="telefono"
+                ></v-text-field>
+              </v-flex>
               <v-flex xs12 sm6>
                 <v-select
                   v-model="rol"
@@ -54,7 +53,7 @@
         </v-card-text>
         <v-card-actions
           ><v-flex xs8 sm6>
-            <v-btn color="info" disabled @click="cambioContra"
+            <v-btn color="info"  @click="cambioContra"
               >Cambiar Contraseña</v-btn
             >
           </v-flex>
@@ -123,7 +122,6 @@ export default {
       nombre: "",
       cedula: "",
       telefono: "",
-      
 
       dialogAlert: false,
       textDialogAler: "",
@@ -139,7 +137,12 @@ export default {
         { text: "Email", value: "email", sortable: true, align: "center" },
         { text: "Nombre", value: "nombre", sortable: true, align: "center" },
         { text: "Cedula", value: "cedula", sortable: true, align: "center" },
-        { text: "Telefono", value: "telefono", sortable: true, align: "center" },
+        {
+          text: "Telefono",
+          value: "telefono",
+          sortable: true,
+          align: "center",
+        },
         {
           text: "Rol",
           value: "rol",
@@ -256,7 +259,19 @@ export default {
         });
     },
 
-    cambioContra() {},
+    cambioContra() {
+      firebase
+        .auth()
+        .sendPasswordResetEmail(this.email)
+        .then(() => {
+          
+          this.dialog = false;
+        })
+        .catch((error) => {
+          this.dialog = false;
+          console.log(error);
+        });
+    },
   },
 };
 </script>

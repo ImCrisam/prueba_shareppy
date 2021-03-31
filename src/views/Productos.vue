@@ -111,7 +111,7 @@
           </v-card-text>
           <v-card-actions
             ><v-flex xs8 sm6>
-              <v-btn color="info" disabled @click="cambioContra"
+              <v-btn color="info"  @click="cambioContra"
                 >Cambiar Contraseña</v-btn
               >
             </v-flex>
@@ -213,7 +213,20 @@ export default {
           console.log(error);
         });
     },
-    cambioContra() {},
+    cambioContra() {
+        firebase
+        .auth()
+        .sendPasswordResetEmail(this.email)
+        .then(() => {
+        
+          this.dialog = false;
+        })
+        .catch((error) => {
+          this.dialog = false;
+          console.log(error);
+        });
+
+    },
   },
 };
 </script>

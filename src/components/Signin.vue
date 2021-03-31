@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     onSignin() {
-      this.loading= true;
+      this.loading = true;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
@@ -85,25 +85,22 @@ export default {
             .get()
             .then((doc) => {
               if (doc.exists && doc.data().state) {
-                
                 this.$store.commit("setUser", auth.user);
                 this.$store.commit("setRol", doc.data().rol);
                 this.$store.commit("setData", {
-                  cedula:doc.data().cedula,
-                  nombre:doc.data().nombre,
-                  telefono:doc.data().telefono,
-                 });
+                  cedula: doc.data().cedula,
+                  nombre: doc.data().nombre,
+                  telefono: doc.data().telefono,
+                });
 
                 if (this.$store.getters.admin) {
                   this.$router.push({
                     name: "usuarios",
                   });
-                  
                 } else {
                   this.$router.push({
                     name: "productos",
                   });
-                
                 }
               } else {
                 if (!doc.data().state) {
@@ -116,8 +113,12 @@ export default {
             })
             .catch((error) => {
               this.loading = false;
-              console.log("erro: "+error);
+              console.log("erro: " + error);
             });
+        })
+        .catch((error) => {
+          this.loading = false;
+          console.log("erro: " + error);
         });
     },
   },
