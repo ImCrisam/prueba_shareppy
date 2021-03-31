@@ -97,38 +97,34 @@ export default {
   },
   methods: {
     onSignup() {
-      if (this.comparePasswords && this.minPasswords) {
-        this.loading = true;
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .then((auth) => {
-            firebase
-              .firestore()
-              .collection("user")
-              .doc(auth.user.uid)
-              .set({
-                email: auth.user.email,
-                admin: this.admin,
-                state: true,
-              })
-              .then((message) => {
-                this.loading = false;
-                console.log("create");
-                this.$router.go(-1);
-              })
-              .catch((error) => {
-                console.log("erro doc "+error);
-                 this.loading = false;
-              });
-          })
-          .catch((error) => {
-            console.log("auth erro"+error);
-             this.loading = false;
-          });
-      } else {
-        this.error = "error";
-      }
+      this.loading = true;
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((auth) => {
+          firebase
+            .firestore()
+            .collection("user")
+            .doc(auth.user.uid)
+            .set({
+              email: auth.user.email,
+              admin: this.admin,
+              state: true,
+            })
+            .then((message) => {
+              this.loading = false;
+              console.log("create");
+              this.$router.go(-1);
+            })
+            .catch((error) => {
+              console.log("erro doc " + error);
+              this.loading = false;
+            });
+        })
+        .catch((error) => {
+          console.log("auth erro" + error);
+          this.loading = false;
+        });
     },
   },
 };
