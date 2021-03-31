@@ -88,6 +88,12 @@ export default {
                 
                 this.$store.commit("setUser", auth.user);
                 this.$store.commit("setRol", doc.data().rol);
+                this.$store.commit("setData", {
+                  cedula:doc.data().rol,
+                  nombre:doc.data().nombre,
+                  telefono:doc.data().telefono,
+                 });
+
                 if (this.$store.getters.admin) {
                   this.$router.push({
                     name: "usuarios",

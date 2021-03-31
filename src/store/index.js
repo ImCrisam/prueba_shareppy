@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: null,
+    data: null,
     rol: null,
     
   },
@@ -15,6 +16,9 @@ export default new Vuex.Store({
     },
     setRol(state, set) {
       state.rol = set
+    },
+    setData(state, set) {
+      state.data = set
     },
   },
   actions: {
@@ -28,6 +32,9 @@ export default new Vuex.Store({
     },
     rol(state) {
       return state.rol
+    },
+    data(state) {
+      return state.data
     },
     admin(state) {
       return state.rol == "Administrador";

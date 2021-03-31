@@ -7,6 +7,33 @@
             <v-container>
               <form @submit.prevent="onSignup">
                 <v-layout row>
+                  <v-flex xs12 md6>
+                    <v-text-field
+                      name="Nombres"
+                      label="Nombres"
+                      id="Nombres"
+                      v-model="nombre"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6>
+                    <v-text-field
+                      name="cedula"
+                      label="cedula"
+                      id="cedula"
+                      v-model="cedula"
+                      ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md12>
+                    <v-text-field
+                      name="telefono"
+                      label="telefono"
+                      id="telefono"
+                      v-model="telefono"
+                      
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
+                <v-layout row>
                   <v-flex xs12>
                     <v-text-field
                       name="email"
@@ -89,6 +116,9 @@ export default {
       rol: "",
       email: "",
       password: "",
+      nombre: "",
+      telefono: "",
+      cedula: "",
       confirmPassword: "",
       loading: false,
       error: "",
@@ -121,6 +151,9 @@ export default {
             .set({
               email: auth.user.email,
               rol: this.rol,
+              nombre: this.nombre,
+              telefono: this.telefono,
+              cedula: this.cedula,
               state: true,
             })
             .then((message) => {
