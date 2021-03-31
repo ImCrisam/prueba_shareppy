@@ -179,7 +179,8 @@ export default {
   methods: {
     salir() {
       this.$store.commit("setUser", null);
-      this.$store.commit("setAdmin", null);
+      this.$store.commit("setRol", null);
+      this.$store.commit("setData", null);
       this.$router.push({ name: "home" });
     },
     editar() {
@@ -192,7 +193,7 @@ export default {
     },
     vista() {
       this.$router.push({
-        name: "View",
+        name: "productos",
       });
     },
 

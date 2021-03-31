@@ -8,6 +8,7 @@ export default new Vuex.Store({
     user: null,
     data: null,
     rol: null,
+    compra:null,
     
   },
   mutations: {
@@ -19,6 +20,9 @@ export default new Vuex.Store({
     },
     setData(state, set) {
       state.data = set
+    },
+    setCompra(state, set) {
+      state.compra = set
     },
   },
   actions: {
@@ -35,6 +39,9 @@ export default new Vuex.Store({
     },
     data(state) {
       return state.data
+    },
+    compra(state) {
+      return state.compra
     },
     admin(state) {
       return state.rol == "Administrador";

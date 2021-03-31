@@ -18,8 +18,32 @@ const routes = [
   },
   {
     path: '/',
-    name: 'productos',
     component: () => import('@/views/Productos.vue'),
+    meta: {
+      admin: true,
+    },
+    children: [
+
+      {
+        path: '/Productos',
+        name: 'productos',
+        component: () => import('@/views/Productos/ListaProductos.vue'),
+
+        meta: {
+          admin: true
+        },
+      },
+      {
+        path: '/Confirmar',
+        name: 'confirmar',
+        component: () => import('@/views/Productos/Confirmar.vue'),
+
+        meta: {
+          admin: true
+        },
+      },
+     
+    ],
   },
   {
     path: '/DashBoard',

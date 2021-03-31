@@ -60,7 +60,7 @@ import firebase from "firebase/app";
 export default {
   data() {
     return {
-      email: "admin@gmail.com",
+      email: "ejempo@gmail.com",
       password: "123456",
       loading: false,
       error: "",
@@ -100,9 +100,9 @@ export default {
                   });
                   
                 } else {
-                  /* router.push({
-                    name: "View",
-                  }); */
+                  this.$router.push({
+                    name: "productos",
+                  });
                 
                 }
               } else {
