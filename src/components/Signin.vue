@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs11 sm6 offset-sm3>
         <v-card>
           <v-card-text>
             <v-container>
@@ -89,7 +89,7 @@ export default {
                 this.$store.commit("setUser", auth.user);
                 this.$store.commit("setRol", doc.data().rol);
                 this.$store.commit("setData", {
-                  cedula:doc.data().rol,
+                  cedula:doc.data().cedula,
                   nombre:doc.data().nombre,
                   telefono:doc.data().telefono,
                  });
