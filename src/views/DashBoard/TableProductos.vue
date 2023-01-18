@@ -135,7 +135,7 @@ export default {
           align: "center",
         },
         {
-          text: "Borrar",
+          text: "Borrar Disabled",
           value: "borrar",
           sortable: false,
           align: "center",

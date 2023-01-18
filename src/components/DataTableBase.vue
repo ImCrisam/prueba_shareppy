@@ -68,7 +68,7 @@
         </v-icon>
       </template>
       <template v-slot:[`item.borrar`]="{ item }">
-        <v-icon class="mr-2" @click="$emit('delete', item)" color="error">
+        <v-icon class="mr-2" @click="/*$emit('delete', item)*/" color="blue-grey">
           mdi-delete-circle-outline</v-icon
         >
       </template>

@@ -60,7 +60,7 @@ import firebase from "firebase/app";
 export default {
   data() {
     return {
-      email: "ejempo@gmail.com",
+      email: "admin@gmail.com",
       password: "123456",
       loading: false,
       error: "",
