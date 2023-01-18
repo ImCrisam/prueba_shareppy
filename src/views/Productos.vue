@@ -3,7 +3,7 @@
     <v-app id="sandbox">
       <v-navigation-drawer v-model="primaryDrawer.model" :clipped="true" app>
         <v-list dense class="py-0">
-          <v-card align="center ">
+          <v-card align="center">
             <v-card-text class="pb-0 pt-7">
               <v-row align="center" justify="space-around">
                 <v-col class="py-0" cols="10">
@@ -17,7 +17,7 @@
                   </v-list-item>
                 </v-col>
               </v-row>
-              <v-row align="center" justify="space-around">
+              <v-row align="center " justify="space-around">
                 <v-col cols="6">
                   <v-btn-toggle v-model="$vuetify.theme.dark" rounded small>
                     <v-btn small>
