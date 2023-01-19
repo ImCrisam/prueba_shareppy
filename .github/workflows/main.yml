@@ -1,4 +1,4 @@
-name: Deploy 
+name: Deploy
 
 on:
   push:
@@ -32,4 +32,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: dist
-          CNAME:
+          CNAME: http://imcrisam.site/prueba_shareppy/
