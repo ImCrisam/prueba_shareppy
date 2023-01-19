@@ -9,7 +9,7 @@
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field
-                      name="email"
+                      name="email "
                       label="E-mail"
                       id="email"
                       v-model="email"
